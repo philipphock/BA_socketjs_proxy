@@ -54,7 +54,11 @@ class WSFrame(object):
         return (ByteArray(self._bytes)).bitOperation[4:8]
     
     def getMaskBit(self):
-        return (ByteArray(self._bytes)).bitOperation[8]
+        try:
+            return (ByteArray(self._bytes)).bitOperation[8]
+        except IndexError:
+            raise FrameHeaderIncomplete
+        
 
     
     def getPayloadLen7(self):
@@ -87,7 +91,7 @@ class WSFrame(object):
         return i    
     
     def getByteLen(self):
-        return len(self._bytes)#self._len
+        return self._len
     
     def getMaskKeyStartIndex(self):
         
