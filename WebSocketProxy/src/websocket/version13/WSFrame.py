@@ -35,6 +35,7 @@ class WSFrame(object):
     
     
     def __init__(self):
+        self._len=0
         pass
     
     def setBytes(self,bytes):
@@ -43,6 +44,7 @@ class WSFrame(object):
           
         '''
         self._bytes=bytes
+        self._len=len(bytes)
     
     def getFin(self):
         return (ByteArray(self._bytes)).bitOperation[0]
@@ -56,7 +58,7 @@ class WSFrame(object):
 
     
     def getPayloadLen7(self):
-        if len(self._bytes)<2:
+        if self.getByteLen()<2:
             raise FrameHeaderIncomplete
         ba=ByteArray(self._bytes)
         ret=ByteArray()
@@ -66,7 +68,7 @@ class WSFrame(object):
             
     
     def getExtendedPayloadLen16(self):
-        if len(self._bytes)<4:
+        if self.getByteLen()<4:
             raise FrameHeaderIncomplete
 
         ba=ByteArray(self._bytes)
@@ -76,7 +78,7 @@ class WSFrame(object):
         return i   
     
     def getExtendedPayloadLen64(self):
-        if len(self._bytes)<10:
+        if self.getByteLen()<10:
             raise FrameHeaderIncomplete
         ba=ByteArray(self._bytes)
         ret=ByteArray()
@@ -85,7 +87,7 @@ class WSFrame(object):
         return i    
     
     def getByteLen(self):
-        return len(self._bytes)
+        return len(self._bytes)#self._len
     
     def getMaskKeyStartIndex(self):
         
@@ -114,9 +116,13 @@ class WSFrame(object):
 
     def getMaskKey(self):
         if self.getMaskBit()=="0":return 0
-        
-        i = self.getMaskKeyStartIndex()
-        m=self._bytes[i:i+32]
+        try:
+            i = self.getMaskKeyStartIndex()
+        except IndexError:
+            raise FrameHeaderIncomplete()
+        if (self.getByteLen()<i+4):
+            raise FrameHeaderIncomplete()
+        m=self._bytes[i:i+4]
         return m
        
     def decode(self,bytes):

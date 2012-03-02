@@ -39,7 +39,7 @@ class WebSocketHandler(MessageIdentifyProtocol):
             pStartIndex = self._wsFrame.getPayloadStartIndex()
             header=bytes[:pStartIndex]
             rest = bytes[pStartIndex:]
-            #print(self._wsFrame);
+            self._wsFrame.getMaskKey()
             self._msgLen=self._wsFrame.getPayloadLen()
             return (header,rest,True)    
         except FrameHeaderIncomplete:
@@ -57,6 +57,7 @@ class WebSocketHandler(MessageIdentifyProtocol):
            o_message are bytes that are part of other messages
            cmDone is True if the current message is complete
         '''
+        
         pl=self._wsFrame.getPayloadLen()
         
         return (bytes[:pl],bytes[pl:],len(bytes)>=pl)
