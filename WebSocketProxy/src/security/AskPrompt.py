@@ -79,7 +79,7 @@ class Prompt(Dialog):
         row=0
         
         labelopts = {"sticky":W}
-        Label(master, text="A script is asking for accesss:").grid(row = row, column = 0,columnspan=2)
+        Label(master, text="A script is asking for access:").grid(row = row, column = 0,columnspan=2)
         row+=1
         Label(master, text="Type: %s"%self.type).grid(row=row, column = 0,**labelopts)
         row+=1
