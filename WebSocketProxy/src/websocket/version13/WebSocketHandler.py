@@ -74,12 +74,7 @@ class WebSocketHandler(MessageIdentifyProtocol):
         else:
             return (bytes[:httpHeaderSeparatorPosition],bytes[httpHeaderSeparatorPosition+4:],True)
         
-        
-    
-#    def errorMessage(self,err):
-#        msg=b"I"+base64.b64encode(err)
-#        self.sendWSFrame(msg)
-        
+  
     
     def aMessage(self,message):
         pass

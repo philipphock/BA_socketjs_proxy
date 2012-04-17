@@ -39,7 +39,6 @@ class WebSocketProxyHandler(WebSocketHandler):
         
         self._socketType = None
         if b"proxy" not in c:
-            #TODO check policy
             Log.error("An incoming connection has no proxy field",False)
             self.doDisconnect()
             return 
